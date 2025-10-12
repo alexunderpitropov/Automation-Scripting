@@ -1,0 +1,3 @@
+
+* * * * * /app/cron_daily.sh >> /var/log/cron.log 2>&1
+
