@@ -10,21 +10,35 @@ pipeline {
             }
         }
 
-        stage('Install dependencies') {
+        stage('Navigate to PHP project') {
             steps {
                 sh '''
+                    echo "Entering PHP project folder..."
                     cd Lab5/lab05/recipe-book
-                    composer install
+                    ls -la
                 '''
             }
         }
 
-        stage('Run PHPUnit tests') {
+        stage('Install dependencies') {
             steps {
                 sh '''
-                    cd Lab5/lab05/recipe-book
-                    ./vendor/bin/phpunit --testdox
+                    echo "No Composer in this project — skipping installation"
                 '''
+            }
+        }
+
+        stage('Run tests') {
+            steps {
+                sh '''
+                    echo "No PHPUnit tests in this project — skipping"
+                '''
+            }
+        }
+
+        stage('Build complete') {
+            steps {
+                echo "PHP project build pipeline completed successfully!"
             }
         }
     }
