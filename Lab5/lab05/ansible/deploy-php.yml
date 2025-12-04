@@ -1,22 +1,24 @@
 ---
-- name: Deploy PHP project to test server
+- name: Deploy PHP Recipe Book
   hosts: test_server
   become: yes
 
   tasks:
-    - name: Install rsync
-      apt:
-        name: rsync
-        state: present
-        update_cache: yes
-
     - name: Copy PHP project to server
       synchronize:
-        src: ../recipe-book/
-        dest: /var/www/html/
+        src: "../recipe-book/"
+        dest: "/var/www/html/"
+        recursive: yes
         delete: yes
 
-    - name: Ensure Apache is running
+    - name: Set correct permissions
+      file:
+        path: "/var/www/html"
+        owner: www-data
+        group: www-data
+        recurse: yes
+
+    - name: Restart Apache
       service:
         name: apache2
         state: restarted
