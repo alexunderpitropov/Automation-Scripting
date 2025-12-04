@@ -4,30 +4,40 @@
   become: yes
 
   tasks:
+
     - name: Install rsync
       apt:
         name: rsync
         state: present
         update_cache: yes
 
-    - name: Remove default index.php
-      file:
-        path: /var/www/html/index.php
-        state: absent
-
-    - name: Copy PHP project to server
-      synchronize:
-        src: "../recipe-book/"
-        dest: "/var/www/html/"
-        recursive: yes
-        delete: yes
-
-    - name: Fix permissions
+    - name: Remove default Apache webroot
       file:
         path: /var/www/html
+        state: absent
+
+    - name: Create new webroot
+      file:
+        path: /var/www/html
+        state: directory
         owner: www-data
         group: www-data
+        mode: '0755'
+
+    - name: Copy PHP project to server
+      ansible.builtin.copy:
+        src: "../recipe-book/"
+        dest: "/var/www/html/"
+        owner: www-data
+        group: www-data
+        mode: "0755"
         recurse: yes
+
+    - name: Set Apache DocumentRoot to public directory
+      ansible.builtin.replace:
+        path: /etc/apache2/sites-available/000-default.conf
+        regexp: 'DocumentRoot /var/www/html'
+        replace: 'DocumentRoot /var/www/html/public'
 
     - name: Restart Apache
       service:
