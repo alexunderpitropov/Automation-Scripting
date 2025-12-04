@@ -3,36 +3,29 @@ pipeline {
 
     stages {
 
-        stage('Checkout PHP project') {
+        stage('Clone PHP project') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/YOUR_USERNAME/YOUR_PHP_PROJECT.git'
+                    url: 'https://github.com/alexunderpitropov/Automation-Scripting.git'
             }
         }
 
         stage('Install dependencies') {
             steps {
-                sh 'composer install'
+                sh '''
+                    cd Lab5/lab05/recipe-book
+                    composer install
+                '''
             }
         }
 
         stage('Run PHPUnit tests') {
             steps {
-                sh './vendor/bin/phpunit --testdox --log-junit test-results.xml'
+                sh '''
+                    cd Lab5/lab05/recipe-book
+                    ./vendor/bin/phpunit --testdox
+                '''
             }
-        }
-
-        stage('Archive test results') {
-            steps {
-                junit 'test-results.xml'
-                archiveArtifacts artifacts: 'test-results.xml', fingerprint: true
-            }
-        }
-    }
-
-    post {
-        always {
-            echo "Pipeline finished."
         }
     }
 }
