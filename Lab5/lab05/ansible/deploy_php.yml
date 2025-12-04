@@ -4,6 +4,12 @@
   become: yes
 
   tasks:
+    - name: Install rsync
+      apt:
+        name: rsync
+        state: present
+        update_cache: yes
+
     - name: Remove default index.php
       file:
         path: /var/www/html/index.php
@@ -27,4 +33,3 @@
       service:
         name: apache2
         state: restarted
-
