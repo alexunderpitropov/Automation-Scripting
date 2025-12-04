@@ -1,0 +1,30 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt update && apt install -y \
+    ansible \
+    openssh-server \
+    python3 \
+    git \
+    tzdata \
+    openjdk-17-jre-headless \
+    && apt clean
+
+RUN useradd -m -s /bin/bash ansible
+
+# SSH directory
+RUN mkdir -p /home/ansible/.ssh && chmod 700 /home/ansible/.ssh
+
+# Copy keys
+COPY ansible_agent_key /home/ansible/.ssh/id_ed25519
+COPY ansible_agent_key.pub /home/ansible/.ssh/authorized_keys
+
+RUN chmod 600 /home/ansible/.ssh/id_ed25519 /home/ansible/.ssh/authorized_keys && \
+    chown -R ansible:ansible /home/ansible/.ssh
+
+RUN mkdir /var/run/sshd
+
+EXPOSE 22
+
+CMD ["/usr/sbin/sshd", "-D"]
