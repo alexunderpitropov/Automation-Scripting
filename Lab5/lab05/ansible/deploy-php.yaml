@@ -1,0 +1,22 @@
+---
+- name: Deploy PHP project to test server
+  hosts: test_server
+  become: yes
+
+  tasks:
+    - name: Install rsync
+      apt:
+        name: rsync
+        state: present
+        update_cache: yes
+
+    - name: Copy PHP project to server
+      synchronize:
+        src: ../recipe-book/
+        dest: /var/www/html/
+        delete: yes
+
+    - name: Ensure Apache is running
+      service:
+        name: apache2
+        state: restarted
