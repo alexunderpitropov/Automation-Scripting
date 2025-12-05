@@ -31,7 +31,7 @@
         owner: www-data
         group: www-data
         mode: "0755"
-        recurse: yes
+        directory_mode: "0755"
 
     - name: Set Apache DocumentRoot to public directory
       ansible.builtin.replace:
