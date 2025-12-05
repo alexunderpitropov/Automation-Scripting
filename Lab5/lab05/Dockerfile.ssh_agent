@@ -1,0 +1,32 @@
+FROM ubuntu:22.04
+
+# Отключаем интерактивные запросы tzdata
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Обновление и установка зависимостей
+RUN apt update && apt install -y \
+    openssh-server \
+    php-cli \
+    git \
+    composer \
+    tzdata \
+    openjdk-17-jre-headless \
+    && apt clean
+
+# Создаём пользователя jenkins
+RUN useradd -m -s /bin/bash jenkins
+
+# Настраиваем SSH директорию
+RUN mkdir -p /home/jenkins/.ssh && chmod 700 /home/jenkins/.ssh
+
+# Копируем публичный ключ (файл должен существовать в проекте)
+COPY ssh_agent_key.pub /home/jenkins/.ssh/authorized_keys
+
+RUN chmod 600 /home/jenkins/.ssh/authorized_keys && \
+    chown -R jenkins:jenkins /home/jenkins/.ssh
+
+RUN mkdir /var/run/sshd
+
+EXPOSE 22
+
+CMD ["/usr/sbin/sshd", "-D"]
