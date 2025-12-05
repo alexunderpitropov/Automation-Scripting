@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  jenkins-controller:
+    image: jenkins/jenkins:lts
+    container_name: jenkins-controller-lab05
+    ports:
+      - "8080:8080"
+    volumes:
+      - jenkins_data:/var/jenkins_home
+    user: root
+    environment:
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=true
+    restart: unless-stopped
+
+  ssh-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile.ssh_agent
+    container_name: ssh-agent-lab05
+    ports:
+      - "2222:22"
+    restart: unless-stopped
+
+  ansible-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile.ansible_agent
+    container_name: ansible-agent-lab05
+    ports:
+      - "2200:22"
+    volumes:
+      - ./ansible:/ansible
+    restart: unless-stopped
+
+  test-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.test_server
+    container_name: test-server-lab05
+    ports:
+      - "8081:80"
+      - "2223:22"
+    restart: unless-stopped
+
+volumes:
+  jenkins_data:
