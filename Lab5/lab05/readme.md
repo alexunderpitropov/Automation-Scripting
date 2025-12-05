@@ -314,9 +314,24 @@ http://localhost:8081
 
 # **Библиография**
 
-* Docker Documentation
-* Jenkins Documentation
-* Ansible Documentation
-* OpenSSH Manual
+- **Docker Documentation.** Dockerfiles, Compose, Container Networking.  
+  https://docs.docker.com/
+
+- **Red Hat Ansible Documentation.** User Guide, Playbooks, Inventory, Modules.  
+  https://docs.ansible.com/
+
+- **Jenkins Documentation.** Continuous Integration and Delivery.  
+  https://www.jenkins.io/doc/
+
+- **OpenSSH Documentation.** SSH Architecture and Key Authentication.  
+  https://www.openssh.org/manual.html
+
+- **PHP Documentation.** PHP manual, CLI, extensions.  
+  https://www.php.net/manual/en/
+
+- **Apache HTTP Server Documentation.** Virtual Hosts, Modules, Configuration.  
+  https://httpd.apache.org/docs/
+
+
 
 
